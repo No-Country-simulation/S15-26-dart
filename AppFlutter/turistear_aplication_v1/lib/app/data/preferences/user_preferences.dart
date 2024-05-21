@@ -1,5 +1,5 @@
 import 'dart:convert';
-
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:turistear_aplication_v1/app/data/model/user.dart';
 
 class RememberUserPrefs {
@@ -16,10 +16,8 @@ class RememberUserPrefs {
     User? currentUserInfo;
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? userInfo = preferences.getString("currentUser");
-    if (userInfo != null) {
-      Map<String, dynamic> userDataMap = jsonDecode(userInfo);
-      currentUserInfo = User.fromJson(userDataMap);
-    }
+    Map<String, dynamic> userDataMap = jsonDecode(userInfo!);
+    currentUserInfo = User.fromJson(userDataMap);
     return currentUserInfo;
   }
 
