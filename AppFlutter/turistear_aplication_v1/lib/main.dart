@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
+
 import 'package:turistear_aplication_v1/app/api_connection/dio_instance.dart';
 import 'package:turistear_aplication_v1/second_page.dart';
+import 'app/values/theme_app.dart';
 
 void main() {
   DioInstance.configureDio();
-  runApp(const MyApp());
+  runApp(MyApp(theme: AppTheme.lightTheme));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final ThemeData theme;
+
+  const MyApp({Key? key, required this.theme}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -16,29 +20,12 @@ class MyApp extends StatelessWidget {
       // Desactiva Cinta de Debug
       debugShowCheckedModeBanner: false,
       title: 'TuristApp',
-      theme: ThemeData(
-        // Esquema de Colores para los Componentes
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.lightBlue),
-        // Habilita Material 3 para una experiencia de diseño actualizada
-        useMaterial3: true,
-        textTheme: const TextTheme(
-          headlineLarge: TextStyle(
-            color: Colors.white,
-            fontWeight: FontWeight.bold,
-            shadows: [
-              Shadow(
-                color: Colors.black,
-                blurRadius: 5,
-                offset: Offset(2, 2),
-              ),
-            ],
-          ),
-        ),
-      ),
+      theme: theme,
       home: const MyHomePage(title: 'TuristApp'),
     );
   }
 }
+
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({super.key, required this.title});
@@ -99,7 +86,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   style: Theme
                       .of(context)
                       .textTheme
-                      .headlineLarge,
+                      .bodyLarge!
+                      .copyWith(fontSize: 32),
                   textAlign: TextAlign.center,
                 ),
               ],
@@ -147,9 +135,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
         ),
-
       ),
-
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: const BottomAppBar(
         elevation: 10,
