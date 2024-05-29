@@ -22,7 +22,18 @@ class AppTheme {
         backgroundColor: Colors.blue,
         titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
       ),
-      // Otras propiedades de ThemeData...
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith<Color?>(
+          (Set<WidgetState> states) {
+            return Colors.blue; // Color del pulgar cuando está inactivo
+          },
+        ),
+        trackColor: WidgetStateProperty.resolveWith<Color?>(
+          (Set<WidgetState> states) {
+            return Colors.white; // Color de la pista cuando está inactivo
+          },
+        ),
+      ),
     );
   }
 
@@ -47,7 +58,18 @@ class AppTheme {
         backgroundColor: Colors.blue,
         titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
       ),
-      // Otras propiedades de ThemeData...
+      switchTheme: SwitchThemeData(
+        thumbColor: WidgetStateProperty.resolveWith<Color?>(
+          (Set<WidgetState> states) {
+            return Colors.blue; // Color del pulgar cuando está inactivo
+          },
+        ),
+        trackColor: WidgetStateProperty.resolveWith<Color?>(
+          (Set<WidgetState> states) {
+            return Colors.black; // Color de la pista cuando está inactivo
+          },
+        ),
+      ),
     );
   }
 }
