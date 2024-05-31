@@ -19,8 +19,8 @@ class AppTheme {
         ),
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.blue,
-        titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
+        backgroundColor: Colors.white,
+        titleTextStyle: TextStyle(color: Colors.black, fontSize: 20),
       ),
       switchTheme: SwitchThemeData(
         thumbColor: WidgetStateProperty.resolveWith<Color?>(
@@ -55,7 +55,7 @@ class AppTheme {
         ),
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.black,
         titleTextStyle: TextStyle(color: Colors.white, fontSize: 20),
       ),
       switchTheme: SwitchThemeData(

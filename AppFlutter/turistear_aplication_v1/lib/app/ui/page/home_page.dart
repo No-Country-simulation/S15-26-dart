@@ -1,156 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:turistear_aplication_v1/app/ui/components/categories_slider.dart';
+import 'package:turistear_aplication_v1/app/ui/components/custom_app_bar.dart';
+import 'package:turistear_aplication_v1/app/ui/components/custom_category_card.dart';
+import 'package:turistear_aplication_v1/app/ui/components/recommendatio_slider.dart';
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({super.key});
-
+  MyHomePage({super.key});
+  final List<String> imageUrls = [
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR3-Ec6DdzFKkII3zqh7UrNbf8uA9_BQL1h2g&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQhZhpNtodRsPmnWZAG3eRWRRcbQCf8joUI1w&s',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcToR9yMEptxmtRnpIu5Qp2NklsAXWEGXAG9-A&s',
+  ];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('¡Bienvenida!'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {},
-          ),
-          IconButton(
-            icon: Icon(Icons.menu),
-            onPressed: () {},
-          ),
-        ],
-      ),
+      appBar: const CustomAppBar(title: 'TuristAPP'),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                'Hola Melisa',
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 16),
-              Text(
-                'Categorías',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    CategoryCard(title: 'Museos', icon: Icons.museum),
-                    CategoryCard(title: 'Parques', icon: Icons.park),
-                    CategoryCard(
-                        title: 'Monumentos', icon: Icons.account_balance),
-                    CategoryCard(title: 'Reservas', icon: Icons.nature),
-                    CategoryCard(title: 'Gastronomía', icon: Icons.restaurant),
-                  ],
-                ),
-              ),
-              SizedBox(height: 16),
-              Text(
-                'Recomendaciones',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              SizedBox(height: 8),
-              RecommendationCard(),
-              SizedBox(height: 16),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              const SizedBox(height: 16),
+              CategoriesSlider(),
+              const SizedBox(height: 16),
+              RecommendationsSlider(imageUrls: imageUrls),
+              const SizedBox(height: 16),
+              const Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  ActionCard(title: 'Mapa', icon: Icons.map),
-                  ActionCard(
-                      title: 'Sitios Turisticos', icon: Icons.location_city),
-                  ActionCard(title: 'Mis Sitios', icon: Icons.bookmark),
-                ],
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class CategoryCard extends StatelessWidget {
-  final String title;
-  final IconData icon;
-
-  const CategoryCard({required this.title, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 8.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Icon(icon, size: 40),
-            SizedBox(height: 8),
-            Text(title),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class RecommendationCard extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.network(
-            'https://via.placeholder.com/150',
-            fit: BoxFit.cover,
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  'xxxxxxxxxxxxxxxxxxxxx',
-                  style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text('xxx Km'),
-                Align(
-                  alignment: Alignment.bottomRight,
-                  child: ElevatedButton(
-                    onPressed: () {},
-                    child: Text('Ver'),
+                  Expanded(
+                    flex: 2,
+                    child: SizedBox(
+                      child: CustomCategoryCard(
+                        title: 'Mapa',
+                        icon: Icons.map,
+                        backgroundColor: Colors.teal,
+                        textColor: Colors.black,
+                        iconColor: Colors.black,
+                      ),
+                    ),
                   ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class ActionCard extends StatelessWidget {
-  final String title;
-  final IconData icon;
-
-  const ActionCard({required this.title, required this.icon});
-
-  @override
-  Widget build(BuildContext context) {
-    return Expanded(
-      child: Card(
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Icon(icon, size: 40),
-              SizedBox(height: 8),
-              Text(title),
+                  SizedBox(width: 16),
+                  Expanded(
+                    flex: 1,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height:
+                              90, // Puedes ajustar la altura según sea necesario
+                          child: CustomCategoryCard(
+                            title: 'Sitios Turisticos',
+                            icon: Icons.location_city,
+                            backgroundColor: Colors.yellow,
+                            textColor: Colors.black,
+                            iconColor: Colors.black,
+                          ),
+                        ),
+                        SizedBox(height: 16),
+                        SizedBox(
+                          height:
+                              90, // Puedes ajustar la altura según sea necesario
+                          child: CustomCategoryCard(
+                            title: 'Mis Sitios',
+                            icon: Icons.bookmark,
+                            backgroundColor: Colors.lightBlueAccent,
+                            textColor: Colors.black,
+                            iconColor: Colors.black,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
             ],
           ),
         ),

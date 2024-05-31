@@ -7,7 +7,7 @@ import 'package:turistear_aplication_v1/app/ui/page/profile_page.dart';
 
 class DashboardOfFragments extends StatelessWidget {
   final List<Widget> _fragmentScreens = [
-    const MyHomePage(),
+    MyHomePage(),
     const MapPage(),
     const ProfilePage()
   ];
@@ -42,26 +42,48 @@ class DashboardOfFragments extends StatelessWidget {
           },
         ),
       ),
-      bottomNavigationBar: Consumer<NavigationProvider>(
-        builder: (context, navigationProvider, child) {
-          return BottomNavigationBar(
-            currentIndex: navigationProvider.currentIndex,
-            onTap: (value) {
-              navigationProvider.setIndex(value);
-            },
-            showSelectedLabels: true,
-            showUnselectedLabels: true,
-            backgroundColor: Colors.grey,
-            items: List.generate(3, (index) {
-              var navBtnProperty = _navigationButtonProperties[index];
-              return BottomNavigationBarItem(
-                icon: Icon(navBtnProperty["inactive_icon"]),
-                activeIcon: Icon(navBtnProperty["active_icon"]),
-                label: navBtnProperty["label"],
-              );
-            }),
-          );
-        },
+      bottomNavigationBar: Opacity(
+        opacity: 0.8, // Ajusta la opacidad aquí
+        child: Container(
+          height: 59.6, // Ajusta la altura aquí
+          margin:
+              const EdgeInsets.only(top: 7.4), // Ajusta el margen superior aquí
+          decoration: const BoxDecoration(
+            color: Color.fromARGB(255, 164, 244, 231),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(32),
+              topRight: Radius.circular(32),
+            ),
+          ),
+          child: ClipRRect(
+            borderRadius: const BorderRadius.only(
+              topLeft: Radius.circular(32),
+              topRight: Radius.circular(32),
+            ),
+            child: Consumer<NavigationProvider>(
+              builder: (context, navigationProvider, child) {
+                return BottomNavigationBar(
+                  backgroundColor: Colors
+                      .transparent, // Hacer el fondo transparente para mostrar el color del contenedor
+                  currentIndex: navigationProvider.currentIndex,
+                  onTap: (value) {
+                    navigationProvider.setIndex(value);
+                  },
+                  showSelectedLabels: true,
+                  showUnselectedLabels: true,
+                  items: List.generate(3, (index) {
+                    var navBtnProperty = _navigationButtonProperties[index];
+                    return BottomNavigationBarItem(
+                      icon: Icon(navBtnProperty["inactive_icon"]),
+                      activeIcon: Icon(navBtnProperty["active_icon"]),
+                      label: navBtnProperty["label"],
+                    );
+                  }),
+                );
+              },
+            ),
+          ),
+        ),
       ),
     );
   }

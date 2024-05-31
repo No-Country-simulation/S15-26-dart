@@ -13,6 +13,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       title: Text(title),
       actions: [
+        IconButton(
+          icon: const Icon(Icons.search),
+          onPressed: () {},
+        ),
+        IconButton(
+          icon: const Icon(Icons.menu),
+          onPressed: () {},
+        ),
         Switch(
           value: themeProvider.themeMode == ThemeMode.dark,
           onChanged: (value) {
