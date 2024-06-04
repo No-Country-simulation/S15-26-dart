@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class CustomCategoryCard extends StatelessWidget {
   final String title;
@@ -6,8 +7,6 @@ class CustomCategoryCard extends StatelessWidget {
   final Color backgroundColor;
   final Color textColor;
   final Color iconColor;
-  final double iconSize;
-  final double textSize;
 
   const CustomCategoryCard({
     super.key,
@@ -16,8 +15,6 @@ class CustomCategoryCard extends StatelessWidget {
     required this.backgroundColor,
     required this.textColor,
     required this.iconColor,
-    this.iconSize = 50.0,
-    this.textSize = 16.0,
   });
 
   @override
@@ -25,24 +22,31 @@ class CustomCategoryCard extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         color: backgroundColor,
-        borderRadius: BorderRadius.circular(16),
+        borderRadius: BorderRadius.circular(
+            16.r), // Uso de ScreenUtil para radio de borde responsivo
         boxShadow: const [
           BoxShadow(
-            color: Colors.black54,
-            blurRadius: 5,
-            offset: Offset(3, 3),
+            color: Colors.black26,
+            blurRadius: 8,
+            offset: Offset(2, 4),
           ),
         ],
       ),
-      padding: const EdgeInsets.all(16),
+      padding: EdgeInsets.all(4.w), // Uso de ScreenUtil para padding responsivo
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(icon, size: iconSize, color: iconColor),
-          const SizedBox(height: 8),
+          Icon(icon,
+              size: 50.sp,
+              color:
+                  iconColor), // Uso de ScreenUtil para tamaño de icono responsivo
+          SizedBox(height: 2.h), // Uso de ScreenUtil para espaciado responsivo
           Text(
             title,
-            style: TextStyle(fontSize: textSize, color: textColor),
+            style: TextStyle(
+                fontSize: 10.sp,
+                color:
+                    textColor), // Uso de ScreenUtil para tamaño de texto responsivo
           ),
         ],
       ),

@@ -14,7 +14,7 @@ class RecommendationsSlider extends StatelessWidget {
         const Padding(
           padding: EdgeInsets.all(8.0),
           child: Text(
-            'Recomendaciones',
+            'ver todas',
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,

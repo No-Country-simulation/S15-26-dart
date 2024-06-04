@@ -9,8 +9,9 @@ class AppTheme {
         primary: Colors.blue,
         secondary: Colors.orange,
       ),
+      dividerColor: Colors.transparent,
       textTheme: const TextTheme(
-        bodyLarge: TextStyle(color: Colors.black),
+        bodyLarge: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
         bodyMedium: TextStyle(color: Colors.grey),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -45,8 +46,9 @@ class AppTheme {
         primary: Colors.blue,
         secondary: Colors.orange,
       ),
+      dividerColor: Colors.transparent,
       textTheme: const TextTheme(
-        bodyLarge: TextStyle(color: Colors.white),
+        bodyLarge: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         bodyMedium: TextStyle(color: Colors.grey),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -66,7 +68,7 @@ class AppTheme {
         ),
         trackColor: WidgetStateProperty.resolveWith<Color?>(
           (Set<WidgetState> states) {
-            return Colors.black; // Color de la pista cuando está inactivo
+            return Colors.white; // Color de la pista cuando está inactivo
           },
         ),
       ),

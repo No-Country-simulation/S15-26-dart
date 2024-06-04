@@ -11,9 +11,9 @@ class TouristSite {
 }
 
 final List<TouristSite> touristSites = [
-  TouristSite("Eiffel Tower", LatLng(48.8584, 2.2945)),
-  TouristSite("Louvre Museum", LatLng(48.8606, 2.3376)),
-  TouristSite("Notre Dame Cathedral", LatLng(48.852968, 2.349902)),
+  TouristSite("Eiffel Tower", const LatLng(48.8584, 2.2945)),
+  TouristSite("Louvre Museum", const LatLng(48.8606, 2.3376)),
+  TouristSite("Notre Dame Cathedral", const LatLng(48.852968, 2.349902)),
   // Agrega más sitios turísticos aquí
 ];
 

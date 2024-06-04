@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:turistear_aplication_v1/app/ui/components/categories_slider.dart';
 import 'package:turistear_aplication_v1/app/ui/components/custom_app_bar.dart';
 import 'package:turistear_aplication_v1/app/ui/components/custom_category_card.dart';
@@ -26,54 +27,46 @@ class MyHomePage extends StatelessWidget {
               const SizedBox(height: 16),
               RecommendationsSlider(imageUrls: imageUrls),
               const SizedBox(height: 16),
-              const Row(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    flex: 2,
-                    child: SizedBox(
-                      child: CustomCategoryCard(
-                        title: 'Mapa',
-                        icon: Icons.map,
-                        backgroundColor: Colors.teal,
-                        textColor: Colors.black,
-                        iconColor: Colors.black,
-                      ),
+              StaggeredGrid.count(
+                crossAxisCount: 4,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                children: const [
+                  StaggeredGridTile.count(
+                    crossAxisCellCount: 2,
+                    mainAxisCellCount: 2,
+                    child: CustomCategoryCard(
+                      title: 'Mapa',
+                      icon: Icons.map,
+                      backgroundColor: Color.fromRGBO(26, 188, 156, 1),
+                      textColor: Colors.black,
+                      iconColor: Colors.black,
                     ),
                   ),
-                  SizedBox(width: 16),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      children: [
-                        SizedBox(
-                          height:
-                              90, // Puedes ajustar la altura según sea necesario
-                          child: CustomCategoryCard(
-                            title: 'Sitios Turisticos',
-                            icon: Icons.location_city,
-                            backgroundColor: Colors.yellow,
-                            textColor: Colors.black,
-                            iconColor: Colors.black,
-                          ),
-                        ),
-                        SizedBox(height: 16),
-                        SizedBox(
-                          height:
-                              90, // Puedes ajustar la altura según sea necesario
-                          child: CustomCategoryCard(
-                            title: 'Mis Sitios',
-                            icon: Icons.bookmark,
-                            backgroundColor: Colors.lightBlueAccent,
-                            textColor: Colors.black,
-                            iconColor: Colors.black,
-                          ),
-                        ),
-                      ],
+                  StaggeredGridTile.count(
+                    crossAxisCellCount: 2,
+                    mainAxisCellCount: 1,
+                    child: CustomCategoryCard(
+                      title: 'Sitios Turisticos',
+                      icon: Icons.mode_of_travel,
+                      backgroundColor: Color.fromRGBO(255, 212, 38, 1),
+                      textColor: Colors.black,
+                      iconColor: Colors.black,
+                    ),
+                  ),
+                  StaggeredGridTile.count(
+                    crossAxisCellCount: 2,
+                    mainAxisCellCount: 1,
+                    child: CustomCategoryCard(
+                      title: 'Mis Sitios',
+                      icon: Icons.bookmark,
+                      backgroundColor: Color.fromRGBO(164, 244, 231, 1),
+                      textColor: Colors.black,
+                      iconColor: Colors.black,
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
