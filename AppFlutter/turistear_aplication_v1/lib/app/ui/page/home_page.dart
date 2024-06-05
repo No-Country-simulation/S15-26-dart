@@ -3,7 +3,7 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:turistear_aplication_v1/app/ui/components/categories_slider.dart';
 import 'package:turistear_aplication_v1/app/ui/components/custom_app_bar.dart';
 import 'package:turistear_aplication_v1/app/ui/components/custom_category_card.dart';
-import 'package:turistear_aplication_v1/app/ui/components/recommendatio_slider.dart';
+import 'package:turistear_aplication_v1/app/ui/components/recommendations_slider.dart';
 
 class MyHomePage extends StatelessWidget {
   MyHomePage({super.key});

@@ -6,8 +6,9 @@ class AppTheme {
       primarySwatch: Colors.blue,
       visualDensity: VisualDensity.adaptivePlatformDensity,
       colorScheme: const ColorScheme.light(
-        primary: Colors.blue,
-        secondary: Colors.orange,
+        primary: Color.fromRGBO(164, 244, 231, 1),
+        secondary: Colors.white,
+        tertiary: Color.fromRGBO(204, 203, 203, 1),
       ),
       dividerColor: Colors.transparent,
       textTheme: const TextTheme(
@@ -44,7 +45,8 @@ class AppTheme {
       visualDensity: VisualDensity.adaptivePlatformDensity,
       colorScheme: const ColorScheme.dark(
         primary: Colors.blue,
-        secondary: Colors.orange,
+        secondary: Colors.black,
+        tertiary: Colors.white,
       ),
       dividerColor: Colors.transparent,
       textTheme: const TextTheme(
