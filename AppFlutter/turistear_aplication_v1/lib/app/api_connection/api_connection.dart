@@ -1,5 +1,3 @@
-import 'package:turistear_aplication_v1/app/data/model/itenerary.dart';
-
 class API {
   //localhost:3001
   static const hostConnect = "localhost:3001/v1";
