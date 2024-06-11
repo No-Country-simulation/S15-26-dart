@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:turistear_aplication_v1/app/api_connection/dio_instance.dart';
+import 'package:turistear_aplication_v1/app/api/dio_instance.dart';
 import 'package:turistear_aplication_v1/app/data/model/itenerary.dart';
 import 'package:turistear_aplication_v1/app/mock/list_favorites_sites.dart';
 import 'package:turistear_aplication_v1/app/ui/components/custom_app_bar.dart';

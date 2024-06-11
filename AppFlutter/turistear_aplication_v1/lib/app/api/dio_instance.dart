@@ -77,11 +77,22 @@ class DioInstance {
         print(
             'DioInstance POST request: $path, Data: $data, Query Parameters: $queryParameters');
       }
-      final response = await dioInstance.post(path,
-          data: data, queryParameters: queryParameters);
+
+      final headers = {
+        'Content-Type': 'application/x-www-form-urlencoded',
+      };
+
+      final response = await dioInstance.post(
+        path,
+        data: data,
+        queryParameters: queryParameters,
+        options: dio.Options(headers: headers),
+      );
+
       if (kDebugMode) {
         print('DioInstance POST response: ${response.data}');
       }
+
       return response;
     } catch (error) {
       // Handle request errors

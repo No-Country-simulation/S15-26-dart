@@ -8,8 +8,8 @@ class FavoritesList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text(favorites.turisticName),
-      subtitle: Text(favorites.description),
+      title: Text(favorites.name),
+      subtitle: Text(favorites.category),
     );
   }
 }

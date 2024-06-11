@@ -16,8 +16,10 @@ class RememberUserPrefs {
     User? currentUserInfo;
     SharedPreferences preferences = await SharedPreferences.getInstance();
     String? userInfo = preferences.getString("currentUser");
-    Map<String, dynamic> userDataMap = jsonDecode(userInfo!);
-    currentUserInfo = User.fromJson(userDataMap);
+    if (userInfo != null) {
+      Map<String, dynamic> userDataMap = jsonDecode(userInfo);
+      currentUserInfo = User.fromJson(userDataMap);
+    }
     return currentUserInfo;
   }
 
@@ -25,5 +27,23 @@ class RememberUserPrefs {
     SharedPreferences preferences = await SharedPreferences.getInstance();
     await preferences.remove("currentUser");
     await preferences.remove("token");
+  }
+
+  // Save recent searches
+  static Future<void> storeRecentSearch(String search) async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    List<String> recentSearches =
+        preferences.getStringList("recentSearches") ?? [];
+
+    if (!recentSearches.contains(search)) {
+      recentSearches.add(search);
+      await preferences.setStringList("recentSearches", recentSearches);
+    }
+  }
+
+  // Get recent searches
+  static Future<List<String>> getRecentSearches() async {
+    SharedPreferences preferences = await SharedPreferences.getInstance();
+    return preferences.getStringList("recentSearches") ?? [];
   }
 }

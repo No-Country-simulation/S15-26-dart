@@ -1,11 +1,33 @@
+import 'package:latlong2/latlong.dart';
 import 'package:turistear_aplication_v1/app/data/model/favorites_sites.dart';
 
 List<FavoritesSites> favorites = [
   FavoritesSites(
-      1, "Cabo Frio", "Lindo cabo con arena", "35.45455664", "61.14564564"),
+    id: 1,
+    name: "Cabo Frio",
+    latitude: 35.45455664,
+    longitude: 61.14564564,
+    category: "Hotel",
+  ),
   FavoritesSites(
-      2, "Mar del Flata", "Lindo mar con arena", "34.45455664", "60.14564564"),
+    id: 2,
+    name: "Hotel loco",
+    latitude: 35.35455664,
+    longitude: 61.04564564,
+    category: "Hotel",
+  ),
   FavoritesSites(
-      3, "Carlos Paz", "Sierras cordobesas", "32.45455664", "59.14564564"),
-  FavoritesSites(4, "Miami", "Mar Fiero de EEUU", "30.45455664", "65.14564564"),
+    id: 3,
+    name: "Laguna Larga",
+    latitude: 36.45455664,
+    longitude: 60.14564564,
+    category: "Lago",
+  ),
+  FavoritesSites(
+    id: 4,
+    name: "Cabo Frio",
+    latitude: 35.45455664,
+    longitude: 61.14564564,
+    category: "Hotel",
+  ),
 ];

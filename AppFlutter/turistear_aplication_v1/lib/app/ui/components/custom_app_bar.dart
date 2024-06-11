@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:turistear_aplication_v1/app/provider/theme_provider.dart';
+import 'package:turistear_aplication_v1/app/ui/page/search_page.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String title;
+
   const CustomAppBar({super.key, required this.title});
 
   @override
@@ -15,7 +17,12 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: [
         IconButton(
           icon: const Icon(Icons.search),
-          onPressed: () {},
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => SearchPage(),
+            ),
+          ),
         ),
         IconButton(
           icon: const Icon(Icons.menu),
@@ -26,10 +33,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           onChanged: (value) {
             themeProvider.toggleTheme();
           },
-          // activeColor: Colors.blue,
-          // inactiveThumbColor: Colors.grey,
-          // activeTrackColor: Colors.yellow,
-          // inactiveTrackColor: Colors.red,
         ),
       ],
     );

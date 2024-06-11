@@ -1,27 +1,34 @@
 class FavoritesSites {
-  int turisticId;
-  String turisticName;
-  String description;
-  String latitude;
-  String longitude;
+  final int id;
+  final double latitude;
+  final double longitude;
+  final String name;
+  final String category;
 
-  FavoritesSites(this.turisticId, this.turisticName, this.description,
-      this.latitude, this.longitude);
+  FavoritesSites({
+    required this.id,
+    required this.latitude,
+    required this.longitude,
+    required this.name,
+    required this.category,
+  });
 
-  factory FavoritesSites.fromJson(Map<String, dynamic> json) => FavoritesSites(
-        0,
-        json["Name_TuristSites"],
-        json["Description_TuristSites"],
-        json["Latitude_TuristSites"].toString(),
-        json["Longitude_TuristSites"].toString(),
-      );
+  factory FavoritesSites.fromJson(Map<String, dynamic> json) {
+    return FavoritesSites(
+      id: json['id'],
+      latitude: json['lat'],
+      longitude: json['lon'],
+      name: json['tags']['name'] ?? 'Unnamed',
+      category: json['tags']['tourism'] ?? 'Unknown',
+    );
+  }
 
   Map<String, dynamic> toJson() => {
-        'Id_TuristSites': turisticId
-            .toString(), // Guarda el ID como String en SharedPreferences
-        'Name_TuristSites': turisticName,
-        'Description_TuristSites': description,
+        'Id_TuristSites':
+            id.toString(), // Guarda el ID como String en SharedPreferences
+        'Name_TuristSites': name,
         'Latitude_TuristSites': latitude,
         'Longitude_TuristSites': longitude,
+        'Category': category,
       };
 }

@@ -89,9 +89,7 @@ class DashboardOfFragments extends StatelessWidget {
                               ? navBtnProperty["active_icon"]
                               : navBtnProperty["inactive_icon"],
                           size: 30,
-                          color: navigationProvider.currentIndex == index
-                              ? Colors.black
-                              : Colors.black,
+                          color: Colors.black,
                         ),
                       ),
 

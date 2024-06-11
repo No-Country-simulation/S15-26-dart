@@ -104,6 +104,7 @@ class FormNombre extends StatelessWidget {
                       'Cancelar',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.bold,
+                            fontSize: 12.sp,
                           ),
                     ),
                   ),
@@ -126,6 +127,7 @@ class FormNombre extends StatelessWidget {
                       'Guardar',
                       style: Theme.of(context).textTheme.bodyLarge?.copyWith(
                             fontWeight: FontWeight.bold,
+                            fontSize: 12.sp,
                           ),
                     ),
                   ),
