@@ -87,7 +87,7 @@ class FormNombre extends StatelessWidget {
                 children: [
                   ElevatedButton(
                     onPressed: () {
-                      // Acción de cancelar
+                      Navigator.pop(context); // Cierra el dialogo
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.secondary,
@@ -111,6 +111,7 @@ class FormNombre extends StatelessWidget {
                   ElevatedButton(
                     onPressed: () {
                       onSave(nameController.text);
+                      Navigator.pop(context); // Cierra el dialogo
                     },
                     style: ElevatedButton.styleFrom(
                       backgroundColor: Theme.of(context).colorScheme.primary,

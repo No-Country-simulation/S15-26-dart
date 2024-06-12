@@ -4,7 +4,7 @@ import 'package:turistear_aplication_v1/app/ui/components/categories_slider.dart
 import 'package:turistear_aplication_v1/app/ui/components/custom_app_bar.dart';
 import 'package:turistear_aplication_v1/app/ui/components/custom_category_card.dart';
 import 'package:turistear_aplication_v1/app/ui/components/recommendations_slider.dart';
-import 'package:turistear_aplication_v1/app/ui/page/itenerary_page.dart';
+import 'package:turistear_aplication_v1/app/ui/page/itinerary_list_page.dart';
 import 'package:turistear_aplication_v1/app/ui/page/map_page.dart';
 import 'package:turistear_aplication_v1/app/ui/page/profile_page.dart';
 
@@ -76,7 +76,7 @@ class MyHomePage extends StatelessWidget {
                     mainAxisCellCount: 1,
                     child: GestureDetector(
                       onTap: () =>
-                          navigateToPage(context, const ItineraryPage()),
+                          navigateToPage(context, const ItineraryListPage()),
                       child: const CustomCategoryCard(
                         title: 'Mis Sitios',
                         icon: Icons.bookmark,

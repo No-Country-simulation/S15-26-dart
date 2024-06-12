@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:turistear_aplication_v1/app/provider/navigation_provider.dart';
 import 'package:turistear_aplication_v1/app/ui/page/home_page.dart';
-import 'package:turistear_aplication_v1/app/ui/page/itenerary_page.dart';
+import 'package:turistear_aplication_v1/app/ui/page/itinerary_page.dart';
 import 'package:turistear_aplication_v1/app/ui/page/profile_page.dart';
 
 class DashboardOfFragments extends StatelessWidget {

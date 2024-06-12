@@ -1,20 +1,14 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map_supercluster/flutter_map_supercluster.dart';
-import 'package:geolocator/geolocator.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:turistear_aplication_v1/app/api/overpass_api_service.dart';
 import 'package:turistear_aplication_v1/app/services/location_service.dart';
 import 'package:turistear_aplication_v1/app/ui/components/custom_app_bar.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:turistear_aplication_v1/app/ui/components/widgetmap/flutter_map_zoom_buttons.dart';
-
-class TouristSite {
-  final String name;
-  final LatLng location;
-  final String category;
-
-  TouristSite(this.name, this.location, this.category);
-}
+import 'package:turistear_aplication_v1/app/data/model/favorites_sites.dart';
 
 class MapPage extends StatefulWidget {
   const MapPage({super.key});
@@ -24,14 +18,16 @@ class MapPage extends StatefulWidget {
 }
 
 class MapPageState extends State<MapPage> {
-  List<Marker> markers = [];
+  late final SuperclusterMutableController _superclusterController;
   LatLng? currentPosition;
   final MapController _mapController = MapController();
-  final OverpassApiService _apiService = OverpassApiService();
+  final OverpassApiService _overpassApiService = OverpassApiService();
+  List<FavoritesSites> _touristSites = [];
 
   @override
   void initState() {
     super.initState();
+    _superclusterController = SuperclusterMutableController();
     _getCurrentLocation();
   }
 
@@ -41,51 +37,146 @@ class MapPageState extends State<MapPage> {
     if (position != null) {
       setState(() {
         currentPosition = position;
-        markers.add(
-          Marker(
-            point: currentPosition!,
-            width: 80,
-            height: 80,
+        _moveToCurrentLocation();
+        _fetchTouristSites(_mapController.camera.visibleBounds.southWest,
+            _mapController.camera.visibleBounds.northEast);
+      });
+    }
+  }
+
+  void _fetchTouristSites(LatLng southwest, LatLng northeast) async {
+    try {
+      List<FavoritesSites> sites = await _overpassApiService
+          .fetchTouristSitesByBoundingBox(southwest, northeast);
+      setState(() {
+        _touristSites = sites;
+        _updateMarkers();
+      });
+    } catch (e) {
+      // Manejo de errores
+    }
+  }
+
+  void _updateMarkers() {
+    final markers = <Marker>[];
+
+    if (currentPosition != null) {
+      markers.add(
+        Marker(
+          point: currentPosition!,
+          width: 80,
+          height: 80,
+          child: GestureDetector(
+            onTap: () => _showMarkerInfo(
+                context,
+                FavoritesSites(
+                  id: 0,
+                  latitude: currentPosition!.latitude,
+                  longitude: currentPosition!.longitude,
+                  name: 'Current Location',
+                  category: 'Current Location',
+                )),
             child: const Icon(
               Icons.my_location,
               color: Colors.blue,
               size: 40,
             ),
           ),
-        );
-      });
+        ),
+      );
+    }
+
+    for (var site in _touristSites) {
+      markers.add(
+        Marker(
+          point: LatLng(site.latitude, site.longitude),
+          width: 80,
+          height: 80,
+          child: GestureDetector(
+            onTap: () => _showMarkerInfo(context, site),
+            child: const Icon(
+              Icons.location_on,
+              color: Colors.red,
+              size: 40,
+            ),
+          ),
+        ),
+      );
+    }
+
+    _superclusterController.replaceAll(markers);
+  }
+
+  void _moveToCurrentLocation() {
+    if (currentPosition != null) {
+      _mapController.move(currentPosition!, 15.0);
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Current location not available'),
+        ),
+      );
     }
   }
 
-  List<Marker> _createMarkers(BuildContext context, List<TouristSite> sites) {
-    return sites
-        .map((site) => Marker(
-              point: site.location,
-              width: 80,
-              height: 80,
-              child: GestureDetector(
-                onTap: () => _showMarkerInfo(context, site),
-                child: const Icon(
-                  Icons.location_on,
-                  color: Colors.red,
-                  size: 40,
-                ),
-              ),
-            ))
-        .toList();
+  void _onSearchAreaPressed() {
+    var bounds = _mapController.camera.visibleBounds;
+    LatLng southwest = bounds.southWest;
+    LatLng northeast = bounds.northEast;
+    _fetchTouristSites(southwest, northeast);
   }
 
-  void _showMarkerInfo(BuildContext context, TouristSite site) {
+  void _showMarkerInfo(BuildContext context, FavoritesSites site) {
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
         return AlertDialog(
           title: Text(site.name),
-          content: Text(
-              'Location: ${site.location.latitude}, ${site.location.longitude}'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text('Category: ${site.category}'),
+              const SizedBox(height: 16),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    icon: const Icon(Icons.favorite_border),
+                    onPressed: () {
+                      // Lógica para agregar a favoritos
+                      if (kDebugMode) {
+                        print('Agregar a favoritos: ${site.name}');
+                      }
+                    },
+                  ),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (kDebugMode) {
+                        print('Agregar al itinerario: ${site.name}');
+                      }
+                    },
+                    child: Text(
+                      'Agregar Itinerario',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 12,
+                          ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
           actions: <Widget>[
             TextButton(
-              child: const Text('Close'),
+              child: Text(
+                'Cerrar',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    fontSize: 8.sp,
+                    color: Colors.red // Usa ScreenUtil para el tamaño del texto
+                    ),
+              ),
               onPressed: () {
                 Navigator.of(dialogContext).pop();
               },
@@ -106,17 +197,18 @@ class MapPageState extends State<MapPage> {
         mapController: _mapController,
         options: MapOptions(
           initialCenter: currentPosition ?? const LatLng(-31.417, -64.183),
-          initialZoom: 13.0,
+          initialZoom: 18.0,
         ),
         children: [
           TileLayer(
             urlTemplate: "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
             subdomains: const ['a', 'b', 'c'],
           ),
-          SuperclusterLayer.immutable(
-            initialMarkers: markers,
+          SuperclusterLayer.mutable(
+            controller: _superclusterController,
             indexBuilder: IndexBuilders.computeWithOriginalMarkers,
             clusterWidgetSize: const Size(40, 40),
+            calculateAggregatedClusterData: true,
             builder: (context, position, markerCount, extraClusterData) {
               return Container(
                 decoration: BoxDecoration(
@@ -135,7 +227,23 @@ class MapPageState extends State<MapPage> {
           FlutterMapZoomButtons(
             mapController: _mapController,
             alignment: Alignment.topRight,
-          )
+          ),
+        ],
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          FloatingActionButton(
+            onPressed: _moveToCurrentLocation,
+            child: const Icon(Icons.my_location),
+          ),
+          const SizedBox(height: 12),
+          FloatingActionButton.extended(
+            onPressed: _onSearchAreaPressed,
+            icon: const Icon(Icons.search),
+            label: const Text('Buscar en esta Area'),
+          ),
         ],
       ),
     );

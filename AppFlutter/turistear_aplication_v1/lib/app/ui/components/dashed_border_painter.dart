@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
 class DashedBorderPainter extends CustomPainter {
+  final Color color;
+
+  DashedBorderPainter({required this.color});
+
   @override
   void paint(Canvas canvas, Size size) {
     final paint = Paint()
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1.0
-      ..color = Colors.black;
+      ..color = color;
 
     const dashWidth = 5.0;
     const dashSpace = 3.0;

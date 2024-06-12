@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:provider/provider.dart';
 import 'package:turistear_aplication_v1/app/api/dio_instance.dart';
+import 'package:turistear_aplication_v1/app/provider/itenerary_provider.dart';
 import 'package:turistear_aplication_v1/app/provider/navigation_provider.dart';
 import 'package:turistear_aplication_v1/app/provider/theme_provider.dart';
 import 'package:turistear_aplication_v1/app/ui/dashboard_of_fragments.dart';
@@ -14,6 +15,7 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => NavigationProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => ItineraryProvider()),
       ],
       child: const MyApp(),
     ),

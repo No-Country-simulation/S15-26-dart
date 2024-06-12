@@ -36,6 +36,10 @@ class AppTheme {
           },
         ),
       ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: Color.fromRGBO(164, 244, 231, 1),
+        foregroundColor: Colors.black,
+      ),
     );
   }
 
@@ -73,6 +77,10 @@ class AppTheme {
             return Colors.white; // Color de la pista cuando está inactivo
           },
         ),
+      ),
+      floatingActionButtonTheme: const FloatingActionButtonThemeData(
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
       ),
     );
   }

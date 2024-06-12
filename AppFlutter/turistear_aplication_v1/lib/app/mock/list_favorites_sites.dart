@@ -1,4 +1,3 @@
-import 'package:latlong2/latlong.dart';
 import 'package:turistear_aplication_v1/app/data/model/favorites_sites.dart';
 
 List<FavoritesSites> favorites = [
