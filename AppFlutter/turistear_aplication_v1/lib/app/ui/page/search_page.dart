@@ -1,11 +1,12 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:turistear_aplication_v1/app/api/overpass_api_service.dart';
+import 'package:turistear_aplication_v1/app/provider/favorites_provider.dart';
 import 'package:turistear_aplication_v1/app/services/location_service.dart';
 import 'package:turistear_aplication_v1/app/data/model/favorites_sites.dart';
 import 'package:turistear_aplication_v1/app/ui/components/itinerary_modal.dart';
+import 'package:provider/provider.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({super.key});
@@ -21,6 +22,23 @@ class SearchPageState extends State<SearchPage> {
   List<FavoritesSites> allSites = []; // Lista completa de sitios
   bool isLoading = false;
   String errorMessage = '';
+  int selectedIndex = 0; // Índice del botón seleccionado
+  List<String> categories = ['Todas']; // Incluir 'Todas' por defecto
+  String selectedCategory = 'Todas';
+
+  @override
+  void initState() {
+    super.initState();
+    _searchNearby('');
+  }
+
+  void _updateCategories() {
+    final siteCategories =
+        allSites.map((site) => site.category).toSet().toList();
+    setState(() {
+      categories = ['Todas', ...siteCategories];
+    });
+  }
 
   void _searchNearby(String query) async {
     setState(() {
@@ -49,6 +67,7 @@ class SearchPageState extends State<SearchPage> {
 
       setState(() {
         allSites = sites;
+        _updateCategories(); // Actualizar las categorías disponibles
         searchResults = sites; // Inicialmente, mostrar todos los resultados
         isLoading = false;
       });
@@ -61,22 +80,23 @@ class SearchPageState extends State<SearchPage> {
   }
 
   void _filterResults(String query) {
-    if (query.isEmpty) {
-      setState(() {
-        searchResults =
-            allSites; // Mostrar todos los resultados si el campo de búsqueda está vacío
-      });
-    } else {
-      setState(() {
-        searchResults = allSites
-            .where(
-                (site) => site.name.toLowerCase().contains(query.toLowerCase()))
-            .toList(); // Filtrar resultados por nombre
-      });
-    }
+    List<FavoritesSites> filteredSites = allSites.where((site) {
+      final matchesQuery =
+          site.name.toLowerCase().contains(query.toLowerCase());
+      final matchesCategory =
+          selectedCategory == 'Todas' || site.category == selectedCategory;
+      return matchesQuery && matchesCategory;
+    }).toList();
+
+    setState(() {
+      searchResults = filteredSites;
+    });
   }
 
   Widget _buildSearchResult(FavoritesSites site) {
+    final favoritesProvider = Provider.of<FavoritesProvider>(context);
+    bool isFavorite = favoritesProvider.isFavorite(site);
+
     return Card(
       child: ListTile(
         title: Text(site.name),
@@ -86,22 +106,20 @@ class SearchPageState extends State<SearchPage> {
           mainAxisSize: MainAxisSize.min,
           children: [
             IconButton(
-              icon: const Icon(Icons.favorite_border),
+              icon: isFavorite
+                  ? const Icon(Icons.favorite, color: Colors.red)
+                  : const Icon(Icons.favorite_border),
               onPressed: () {
-                // Lógica para agregar a favoritos
-                if (kDebugMode) {
-                  print('Agregar a favoritos: ${site.name}');
+                if (isFavorite) {
+                  favoritesProvider.removeFavorite(site);
+                } else {
+                  favoritesProvider.addFavorite(site);
                 }
               },
             ),
             ElevatedButton(
               onPressed: () {
-                // Lógica para agregar al itinerario
                 _showItineraryDialog(site); // Mostrar diálogo
-
-                if (kDebugMode) {
-                  print('Agregar al itinerario: ${site.name}');
-                }
               },
               child: Text(
                 'Agregar Itinerario',
@@ -123,9 +141,18 @@ class SearchPageState extends State<SearchPage> {
 
   @override
   Widget build(BuildContext context) {
-    // Define un ButtonStyle común para los botones
-    final ButtonStyle buttonStyle = ElevatedButton.styleFrom(
+    final ButtonStyle inactiveButtonStyle = ElevatedButton.styleFrom(
       backgroundColor: Theme.of(context).colorScheme.primary,
+      side: BorderSide(
+        color: Theme.of(context).colorScheme.tertiary,
+      ),
+      padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(16),
+      ),
+    );
+    final ButtonStyle activeButtonStyle = ElevatedButton.styleFrom(
+      backgroundColor: Theme.of(context).colorScheme.secondary,
       side: BorderSide(
         color: Theme.of(context).colorScheme.tertiary,
       ),
@@ -165,15 +192,21 @@ class SearchPageState extends State<SearchPage> {
                   onPressed: () {
                     setState(() {
                       searchRadius = 5.0;
+                      selectedIndex = 0;
                     });
                     _searchNearby(searchController.text);
                   },
-                  style: buttonStyle, // Aplica el estilo definido
+                  style: selectedIndex == 0
+                      ? activeButtonStyle
+                      : inactiveButtonStyle,
                   child: Text(
                     '5 km',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          fontSize: 12.sp,
+                          fontSize: 12,
+                          color: selectedIndex == 0
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.tertiary,
                         ),
                   ),
                 ),
@@ -181,15 +214,21 @@ class SearchPageState extends State<SearchPage> {
                   onPressed: () {
                     setState(() {
                       searchRadius = 10.0;
+                      selectedIndex = 1;
                     });
                     _searchNearby(searchController.text);
                   },
-                  style: buttonStyle, // Aplica el estilo definido
+                  style: selectedIndex == 1
+                      ? activeButtonStyle
+                      : inactiveButtonStyle,
                   child: Text(
                     '10 km',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          fontSize: 12.sp,
+                          fontSize: 12,
+                          color: selectedIndex == 1
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.tertiary,
                         ),
                   ),
                 ),
@@ -197,16 +236,48 @@ class SearchPageState extends State<SearchPage> {
                   onPressed: () {
                     setState(() {
                       searchRadius = 15.0;
+                      selectedIndex = 2;
                     });
                     _searchNearby(searchController.text);
                   },
-                  style: buttonStyle, // Aplica el estilo definido
+                  style: selectedIndex == 2
+                      ? activeButtonStyle
+                      : inactiveButtonStyle,
                   child: Text(
                     '15 km',
-                    style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                    style: Theme.of(context).textTheme.bodyMedium?.copyWith(
                           fontWeight: FontWeight.bold,
-                          fontSize: 12.sp,
+                          fontSize: 12,
+                          color: selectedIndex == 2
+                              ? Theme.of(context).colorScheme.primary
+                              : Theme.of(context).colorScheme.tertiary,
                         ),
+                  ),
+                ),
+                DropdownButton<String>(
+                  value: selectedCategory,
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      selectedCategory = newValue!;
+                      _filterResults(searchController.text);
+                    });
+                  },
+                  items: categories
+                      .map<DropdownMenuItem<String>>((String category) {
+                    return DropdownMenuItem<String>(
+                      value: category,
+                      child: Text(category),
+                    );
+                  }).toList(),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                  dropdownColor: Theme.of(context).colorScheme.primary,
+                  underline: Container(
+                    height: 2,
+                    color: Theme.of(context).colorScheme.tertiary,
                   ),
                 ),
               ],

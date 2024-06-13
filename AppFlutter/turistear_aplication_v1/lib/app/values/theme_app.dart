@@ -9,6 +9,7 @@ class AppTheme {
         primary: Color.fromRGBO(164, 244, 231, 1),
         secondary: Colors.white,
         tertiary: Color.fromRGBO(204, 203, 203, 1),
+        onPrimary: Colors.black,
       ),
       dividerColor: Colors.transparent,
       textTheme: const TextTheme(
@@ -51,6 +52,7 @@ class AppTheme {
         primary: Colors.blue,
         secondary: Colors.black,
         tertiary: Colors.white,
+        onPrimary: Colors.white,
       ),
       dividerColor: Colors.transparent,
       textTheme: const TextTheme(

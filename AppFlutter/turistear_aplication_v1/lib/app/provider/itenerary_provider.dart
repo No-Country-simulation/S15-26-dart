@@ -14,13 +14,18 @@ class ItineraryProvider with ChangeNotifier {
   List<Itinerary> get itineraries => _itineraries;
 
   ItineraryProvider() {
-    _loadItineraries(); // Cargar los itinerarios al iniciar el proveedor
-    _addMockItineraries(); // Añadir itinerarios de ejemplo
+    _initializeItineraries(); // Inicializar los itinerarios al iniciar el proveedor
   }
 
   void addSite(FavoritesSites site) {
     _itinerarySites.add(site);
     notifyListeners();
+  }
+
+  void addSiteToItinerary(Itinerary itinerary, FavoritesSites site) {
+    itinerary.favoriteSites.add(site);
+    notifyListeners();
+    _saveItineraries();
   }
 
   void removeSite(FavoritesSites site) {
@@ -31,7 +36,7 @@ class ItineraryProvider with ChangeNotifier {
   void removeSiteFromItinerary(Itinerary itinerary, FavoritesSites site) {
     itinerary.favoriteSites.remove(site);
     notifyListeners();
-    _saveItineraries(); // Guardar los cambios en SharedPreferences
+    _saveItineraries();
   }
 
   void removeItinerary(Itinerary itinerary) {
@@ -64,6 +69,13 @@ class ItineraryProvider with ChangeNotifier {
     }
   }
 
+  Future<void> _initializeItineraries() async {
+    await _loadItineraries();
+    if (_itineraries.isEmpty) {
+      _addMockItineraries();
+    }
+  }
+
   Future<void> _loadItineraries() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<String> savedItineraries = prefs.getStringList('itineraries') ?? [];
@@ -71,6 +83,9 @@ class ItineraryProvider with ChangeNotifier {
         .map((itinerary) => Itinerary.fromJson(json.decode(itinerary)))
         .toList();
     notifyListeners();
+    if (kDebugMode) {
+      print('Itinerarios cargados: $_itineraries');
+    }
   }
 
   Future<void> _saveItineraries() async {
@@ -79,6 +94,9 @@ class ItineraryProvider with ChangeNotifier {
         .map((itinerary) => json.encode(itinerary.toJson()))
         .toList();
     await prefs.setStringList('itineraries', savedItineraries);
+    if (kDebugMode) {
+      print('Itinerarios guardados: $_itineraries');
+    }
   }
 
   void _addMockItineraries() {
@@ -88,5 +106,8 @@ class ItineraryProvider with ChangeNotifier {
       Itinerary('Itinerario 3', List.from(favorites)),
     ];
     notifyListeners();
+    if (kDebugMode) {
+      print('Mock itinerarios añadidos: $_itineraries');
+    }
   }
 }

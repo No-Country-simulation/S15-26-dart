@@ -1,12 +1,13 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map_supercluster/flutter_map_supercluster.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:provider/provider.dart';
 import 'package:turistear_aplication_v1/app/api/overpass_api_service.dart';
+import 'package:turistear_aplication_v1/app/provider/favorites_provider.dart';
 import 'package:turistear_aplication_v1/app/services/location_service.dart';
 import 'package:turistear_aplication_v1/app/ui/components/custom_app_bar.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
+import 'package:turistear_aplication_v1/app/ui/components/itinerary_modal.dart';
 import 'package:turistear_aplication_v1/app/ui/components/widgetmap/flutter_map_zoom_buttons.dart';
 import 'package:turistear_aplication_v1/app/data/model/favorites_sites.dart';
 
@@ -23,6 +24,8 @@ class MapPageState extends State<MapPage> {
   final MapController _mapController = MapController();
   final OverpassApiService _overpassApiService = OverpassApiService();
   List<FavoritesSites> _touristSites = [];
+  List<String> categories = ['Todas']; // Lista de categorías
+  String selectedCategory = 'Todas'; // Categoría seleccionada por defecto
 
   @override
   void initState() {
@@ -44,12 +47,21 @@ class MapPageState extends State<MapPage> {
     }
   }
 
+  void _updateCategories() {
+    final siteCategories =
+        _touristSites.map((site) => site.category).toSet().toList();
+    setState(() {
+      categories = ['Todas', ...siteCategories];
+    });
+  }
+
   void _fetchTouristSites(LatLng southwest, LatLng northeast) async {
     try {
       List<FavoritesSites> sites = await _overpassApiService
           .fetchTouristSitesByBoundingBox(southwest, northeast);
       setState(() {
         _touristSites = sites;
+        _updateCategories(); // Actualizar las categorías disponibles
         _updateMarkers();
       });
     } catch (e) {
@@ -127,6 +139,9 @@ class MapPageState extends State<MapPage> {
   }
 
   void _showMarkerInfo(BuildContext context, FavoritesSites site) {
+    final favoritesProvider =
+        Provider.of<FavoritesProvider>(context, listen: false);
+    bool isFavorite = favoritesProvider.isFavorite(site);
     showDialog(
       context: context,
       builder: (BuildContext dialogContext) {
@@ -142,19 +157,23 @@ class MapPageState extends State<MapPage> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   IconButton(
-                    icon: const Icon(Icons.favorite_border),
+                    icon: isFavorite
+                        ? const Icon(Icons.favorite, color: Colors.red)
+                        : const Icon(Icons.favorite_border),
                     onPressed: () {
-                      // Lógica para agregar a favoritos
-                      if (kDebugMode) {
-                        print('Agregar a favoritos: ${site.name}');
+                      if (isFavorite) {
+                        favoritesProvider.removeFavorite(site);
+                      } else {
+                        favoritesProvider.addFavorite(site);
                       }
+                      setState(() {
+                        isFavorite = !isFavorite;
+                      });
                     },
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      if (kDebugMode) {
-                        print('Agregar al itinerario: ${site.name}');
-                      }
+                      _showItineraryDialog(site); // Mostrar diálogo
                     },
                     child: Text(
                       'Agregar Itinerario',
@@ -173,8 +192,8 @@ class MapPageState extends State<MapPage> {
               child: Text(
                 'Cerrar',
                 style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                    fontSize: 8.sp,
-                    color: Colors.red // Usa ScreenUtil para el tamaño del texto
+                      fontSize: 12,
+                      color: Colors.red,
                     ),
               ),
               onPressed: () {
@@ -185,6 +204,10 @@ class MapPageState extends State<MapPage> {
         );
       },
     );
+  }
+
+  void _showItineraryDialog(FavoritesSites site) {
+    ItineraryModal.show(context, site);
   }
 
   @override

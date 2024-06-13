@@ -24,11 +24,32 @@ class FavoritesSites {
   }
 
   Map<String, dynamic> toJson() => {
-        'Id_TuristSites':
-            id.toString(), // Guarda el ID como String en SharedPreferences
-        'Name_TuristSites': name,
-        'Latitude_TuristSites': latitude,
-        'Longitude_TuristSites': longitude,
-        'Category': category,
+        'id': id,
+        'lat': latitude,
+        'lon': longitude,
+        'tags': {
+          'name': name,
+          'tourism': category,
+        },
       };
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+
+    return other is FavoritesSites &&
+        other.id == id &&
+        other.latitude == latitude &&
+        other.longitude == longitude &&
+        other.name == name &&
+        other.category == category;
+  }
+
+  @override
+  int get hashCode =>
+      id.hashCode ^
+      latitude.hashCode ^
+      longitude.hashCode ^
+      name.hashCode ^
+      category.hashCode;
 }
